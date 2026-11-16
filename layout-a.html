@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="noindex" name="robots"/>
+<title>Iceland Cricket – prototype</title>
+<style>
+:root{--navy:#0B2D5B;--navy2:#123E7A;--red:#D7263D;--ice:#F3F6FA;--line:#DCE3EC;--ink:#14213A;--mut:#5A6B85;--gold:#E8B321}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:#fff}
+body.is [lang=en],body:not(.is) [lang=is]{display:none!important}
+a{color:inherit}
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+.proto{background:#DCEBFA;color:#0B2D5B;font-size:13px;text-align:center;padding:6px 12px}
+.proto b{font-weight:700}
+header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line)}
+.hbar{display:flex;align-items:center;gap:22px;height:76px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand img{height:54px}
+.brand span{font-weight:800;letter-spacing:.02em;color:var(--navy);line-height:1.1;font-size:15px}
+.brand small{display:block;font-weight:600;color:var(--red);font-size:11px;letter-spacing:.08em}
+nav.main{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+nav.main a{text-decoration:none;font-weight:650;font-size:14.5px;padding:8px 11px;border-radius:8px;color:var(--navy)}
+nav.main a:hover,nav.main a.on{background:var(--ice)}
+nav.main a.shop{border:1.5px solid var(--navy)}
+.lang{display:flex;border:1.5px solid var(--navy);border-radius:999px;overflow:hidden;margin-left:8px}
+.lang button{border:0;background:#fff;color:var(--navy);font-weight:700;font-size:13px;padding:6px 11px;cursor:pointer}
+.lang button.on{background:var(--navy);color:#fff}
+.burger{display:none;margin-left:auto;border:0;background:none;font-size:26px;color:var(--navy)}
+@media(max-width:980px){nav.main{display:none;position:absolute;top:76px;left:0;right:0;background:#fff;flex-direction:column;padding:10px 20px;border-bottom:1px solid var(--line)}nav.main.open{display:flex}.burger{display:block}.lang{margin-left:0}}
+.page{display:none}.page.on{display:block}
+/* hero */
+.hero{position:relative;min-height:620px;display:flex;align-items:flex-end;color:#fff;background:#24456e;overflow:hidden}
+.slides{position:absolute;inset:0;z-index:0}
+.hero .wrap{z-index:2}
+.slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;z-index:0}
+.slide.prev{opacity:1;z-index:1}
+.slide.on{opacity:1;z-index:2;animation:dissolve 1.3s ease both}
+@keyframes dissolve{from{opacity:0}to{opacity:1}}
+.herobox{background:rgba(11,45,91,.88);border-radius:14px;padding:18px 22px 12px;max-width:430px}
+.herobox .kick{font-size:11px;padding:4px 8px}
+.herobox p{font-size:15.5px!important;margin:0 0 14px!important}
+.herobox .btn{padding:9px 14px;font-size:14px;margin:0 6px 8px 0}
+.hero h1{font-size:clamp(28px,3vw,38px)!important;margin:10px 0 8px!important}
+.hctl{position:absolute;right:20px;bottom:100px;display:flex;gap:8px;align-items:center;z-index:3}
+.hctl button{border:0;background:rgba(255,255,255,.9);color:var(--navy);width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;font-weight:800}
+.dots{display:flex;gap:6px;margin:0 6px}
+.dots i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.55);cursor:pointer;box-shadow:0 0 0 1px rgba(0,0,0,.15)}
+.dots i.on{background:#fff;width:24px;border-radius:6px}
+.cap{position:absolute;right:20px;top:16px;z-index:3;background:rgba(0,0,0,.45);color:#fff;font-size:12.5px;padding:4px 10px;border-radius:6px}
+@media(max-width:760px){.hctl{bottom:auto;top:12px;left:12px;right:auto}.cap{top:14px}.herobox{padding:16px 18px 10px}}
+
+.hero .wrap{position:relative;padding-bottom:100px;width:100%}
+.kick{display:inline-block;background:var(--red);color:#fff;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;border-radius:4px}
+.hero h1{font-size:clamp(34px,5.4vw,64px);line-height:1.04;margin:14px 0 12px;font-weight:850;letter-spacing:-.02em;max-width:820px}
+.hero p{font-size:19px;max-width:620px;margin:0 0 24px;opacity:.95}
+.btn{display:inline-block;text-decoration:none;font-weight:700;padding:12px 20px;border-radius:10px;margin:0 8px 8px 0;cursor:pointer;border:0;font-size:15px}
+.btn.red{background:var(--red);color:#fff}.btn.white{background:#fff;color:var(--navy)}.btn.ghost{border:2px solid #fff;color:#fff}
+.btn.navy{background:var(--navy);color:#fff}
+section{padding:64px 0}
+section.alt{background:var(--ice)}
+h2{font-size:30px;margin:0 0 6px;color:var(--navy);letter-spacing:-.01em}
+.sub{color:var(--mut);margin:0 0 26px}
+.sample{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:#FFF2C9;color:#7A5600;border:1px solid #F0D27A;border-radius:4px;padding:2px 7px;vertical-align:middle}
+.confirm{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:#FDE6E9;color:#9B1A2C;border:1px solid #F3B4BE;border-radius:4px;padding:2px 7px;vertical-align:middle}
+.real{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:#E3F1E8;color:#1E6B3E;border:1px solid #A8D5B8;border-radius:4px;padding:2px 7px;vertical-align:middle}
+/* match centre */
+.mc{background:#fff;border-radius:16px;box-shadow:0 10px 40px rgba(11,45,91,.12);margin-top:-70px;position:relative;z-index:2;overflow:hidden}
+.mchead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabs{display:flex;gap:6px}
+.tabs button{border:0;background:none;font-weight:700;font-size:15px;color:var(--mut);padding:8px 12px;border-bottom:3px solid transparent;cursor:pointer}
+.tabs button.on{color:var(--navy);border-color:var(--red)}
+.mcnote{font-size:13px;color:var(--mut)}
+.mlist{padding:6px 20px 16px}
+.m{display:grid;grid-template-columns:110px 1fr auto;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.m:last-child{border:0}
+@media(max-width:620px){.m{grid-template-columns:1fr;gap:6px}.m a{justify-self:start}.m .logos img{width:38px;height:38px}}
+.m .logos{display:flex;gap:6px}.m .logos img{width:46px;height:46px;object-fit:contain}
+.m .t{font-weight:750;color:var(--navy)}
+.m .r{font-size:14px;color:var(--red);font-weight:650}
+.m .d{font-size:13px;color:var(--mut)}
+.m a{font-size:13px;font-weight:700;color:var(--navy);text-decoration:none;border:1.5px solid var(--line);padding:6px 10px;border-radius:8px;white-space:nowrap}
+.live{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--red);margin-right:6px;animation:p 1.2s infinite}
+@keyframes p{50%{opacity:.25}}
+.mcfoot{padding:12px 20px;background:var(--ice);font-size:14px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.mcfoot a{font-weight:700;color:var(--navy)}
+/* cards */
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.card .im{height:150px;background:linear-gradient(135deg,var(--navy),var(--navy2));display:flex;align-items:center;justify-content:center}
+.card .im img{max-height:100px}
+.card .bd{padding:16px 18px 18px}
+.card .tag{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--red)}
+.card h3{margin:6px 0 6px;font-size:19px;color:var(--navy)}
+.card p{margin:0;color:var(--mut);font-size:15px}
+/* clubs */
+.clubs{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px}
+.club{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 12px;text-align:center}
+.club img{width:96px;height:96px;object-fit:contain}
+.club b{display:block;color:var(--navy);margin-top:8px}
+.club small{display:block;color:var(--mut);font-size:13px;min-height:20px}
+/* banner */
+.try{background:linear-gradient(110deg,rgba(11,45,91,.95) 0%,rgba(18,62,122,.85) 55%,rgba(29,90,168,.45) 100%),url(media/match-action-mountains.jpg) center 60%/cover;color:#fff;border-radius:18px;padding:40px;display:grid;grid-template-columns:1.4fr 1fr;gap:30px;align-items:center}
+.try h2{color:#fff;font-size:34px}
+.try ul{margin:0;padding-left:20px;line-height:1.9}
+@media(max-width:760px){.try{grid-template-columns:1fr;padding:28px}}
+/* timeline */
+.tl{overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}
+.tlgrid{display:grid;min-width:880px;gap:4px;align-items:center}
+.tlgrid .yr{font-size:12px;font-weight:700;color:var(--mut);text-align:center}
+.tlgrid .comp{font-size:13.5px;font-weight:700;color:var(--navy);padding-right:10px;line-height:1.25}
+.tlgrid .comp small{display:block;font-weight:500;color:var(--mut);font-size:12px}
+.cell{height:46px;border-radius:8px;background:var(--ice);display:flex;align-items:center;justify-content:center;position:relative}
+.cell img{width:34px;height:34px;object-fit:contain}
+.cell.gap{background:repeating-linear-gradient(45deg,#fff,#fff 5px,#F1F4F8 5px,#F1F4F8 10px);border:1px dashed var(--line)}
+.cell.ri{background:#E9EEF6;font-size:10.5px;font-weight:800;color:var(--navy);text-align:center;line-height:1.1}
+.cell[title]:hover{outline:2px solid var(--red)}
+.life{margin-top:26px}
+.lrow{display:grid;grid-template-columns:190px 1fr;align-items:center;gap:10px;margin:6px 0;font-size:14px}
+.ltrack{position:relative;height:18px;background:var(--ice);border-radius:9px}
+.lbar{position:absolute;top:0;bottom:0;border-radius:9px;background:var(--navy)}
+.lbar.gone{background:#AEB9C9}
+.lbar.q{background:repeating-linear-gradient(90deg,var(--navy),var(--navy) 6px,#7f95b7 6px,#7f95b7 10px)}
+.axis{display:grid;grid-template-columns:190px 1fr;gap:10px;font-size:12px;color:var(--mut)}
+.axis div:last-child{display:flex;justify-content:space-between}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--mut);margin-top:12px}
+.legend i{display:inline-block;width:18px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.tally{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.tally span{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--navy)}
+.tally img{width:30px;height:30px;object-fit:contain}
+.factcheck{margin-top:18px;background:#FFFBEA;border:1px solid #F0D27A;border-radius:12px;padding:14px 18px;font-size:14.5px}
+.factcheck b{color:#7A5600}
+.factcheck ul{margin:6px 0 0;padding-left:20px}
+/* partners */
+.partners{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;align-items:stretch}
+.slot{border:2px dashed var(--line);border-radius:14px;display:flex;align-items:center;justify-content:center;color:var(--mut);font-weight:700;min-height:90px;background:#fff}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.partners{grid-template-columns:1fr}}
+/* footer */
+footer{background:var(--navy);color:#C9D5E8;padding:48px 0 26px;font-size:15px}
+footer h4{color:#fff;margin:0 0 10px;font-size:15px;letter-spacing:.04em;text-transform:uppercase}
+footer a{color:#fff;text-decoration:none}
+.fgrid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:28px}
+@media(max-width:760px){.fgrid{grid-template-columns:1fr 1fr}}
+.fbot{border-top:1px solid rgba(255,255,255,.15);margin-top:30px;padding-top:16px;font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+/* inner pages */
+.phead{background:var(--navy);color:#fff;padding:46px 0 38px}
+.phead.ph-img{padding:150px 0 38px;background-size:cover;background-position:center 30%}
+.phead.ph-img .wrap{text-shadow:0 1px 8px rgba(0,0,0,.4)}
+.phead h1{margin:6px 0 4px;font-size:40px}
+.phead p{margin:0;opacity:.85;max-width:720px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:760px){.two{grid-template-columns:1fr}}
+.box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.box h3{margin:0 0 8px;color:var(--navy)}
+.box ul{margin:0;padding-left:20px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{color:var(--mut);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.ph{display:inline-block;font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px}
+.p1{background:#E3F1E8;color:#1E6B3E}.p2{background:#E6ECF7;color:var(--navy)}.px{background:#F1F1F1;color:#666}
+
+/* ===== layout switch ===== */
+.lay{display:inline-flex;margin-left:10px;border:1.5px solid #1b1b1b;border-radius:999px;overflow:hidden;vertical-align:middle}
+.lay button{border:0;background:transparent;font-weight:800;font-size:12px;padding:2px 10px;cursor:pointer}
+.lay button.on{background:#1b1b1b;color:var(--gold)}
+body:not(.optB) .onlyB,body.optB .onlyA{display:none!important}
+/* ===== option B: Swiss-style header + mosaic ===== */
+body.optB header{background:var(--navy);border-bottom:0}
+body.optB nav.main a{color:#fff;text-transform:uppercase;letter-spacing:.03em;font-size:14px}
+body.optB nav.main a:hover,body.optB nav.main a.on{background:rgba(255,255,255,.12)}
+body.optB nav.main a.shop{border-color:#fff}
+body.optB nav.main a[href="#plan"]{color:var(--gold)!important}
+body.optB .lang{border-color:#fff}body.optB .lang button{background:transparent;color:#fff}body.optB .lang button.on{background:#fff;color:var(--navy)}
+body.optB .brand{background:#fff;border-radius:0 0 14px 14px;padding:10px 14px 12px;align-self:flex-start;box-shadow:0 6px 18px rgba(0,0,0,.25);position:relative;z-index:5}
+body.optB .brand img{height:96px}
+body.optB .brand span{display:none}
+body.optB nav.main{flex-wrap:nowrap;align-items:center}
+body.optB .hbar{height:84px}
+body.optB .burger{color:#fff}
+.mosaic{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:10px;height:640px;margin-top:-18px}
+.tile{position:relative;background-size:cover;background-position:center;overflow:hidden;text-decoration:none;color:#fff;display:block}
+.tile.big{grid-row:span 2}
+.tile:hover .tt{background:var(--red)}
+.tt{position:absolute;left:24px;right:24px;bottom:22px;background:rgba(0,0,0,.82);padding:10px 14px;font-weight:800;font-size:clamp(17px,1.9vw,26px);line-height:1.2;transition:background .2s}
+.tile.big .tt{bottom:96px}
+.tx{position:absolute;left:24px;right:24px;bottom:22px;background:rgba(0,0,0,.72);padding:10px 14px;font-size:15px;line-height:1.45}
+.tlabel{position:absolute;top:16px;right:16px}
+@media(max-width:860px){.tx{display:none}.tile.big .tt{bottom:22px}.mosaic{grid-template-columns:1fr;grid-template-rows:none;height:auto}.tile{height:300px}.tile.big{grid-row:auto;height:380px}body.optB .brand img{height:56px}}
+.bar{background:var(--red);color:#fff;border-radius:4px;padding:12px 26px;margin:0 0 18px;font-size:clamp(26px,3vw,40px);font-weight:850;letter-spacing:-.01em}
+.bgrid{display:grid;grid-template-columns:3fr 2fr;gap:30px}
+@media(max-width:860px){.bgrid{grid-template-columns:1fr}}
+.ncards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:620px){.ncards{grid-template-columns:1fr}}
+.nc{position:relative;height:260px;border-radius:6px;overflow:hidden;background-size:cover;background-position:center;color:#fff;text-decoration:none;display:flex;align-items:flex-end}
+.nc:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(0,0,0,.85))}
+.nc div{position:relative;padding:16px;font-weight:800;font-size:18px;line-height:1.25}
+.nc small{display:block;font-weight:600;font-size:12px;opacity:.85;margin-top:6px}
+.fx{background:#fff;border:1px solid var(--line);border-radius:6px;padding:4px 16px}
+.fx .m{grid-template-columns:90px 1fr;}
+.fx .m a{display:none}
+
+/* lightbox */
+.lb{position:fixed;inset:0;background:rgba(5,12,25,.94);z-index:100;display:none;align-items:center;justify-content:center}
+.lb.open{display:flex}
+.lb img{max-width:94vw;max-height:88vh;object-fit:contain;border-radius:6px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.lb button{position:absolute;border:0;background:rgba(255,255,255,.92);color:var(--navy);width:46px;height:46px;border-radius:50%;font-size:22px;font-weight:800;cursor:pointer}
+.lb .x{top:18px;right:18px}.lb .l{left:18px;top:50%}.lb .r{right:18px;top:50%}
+.lb .lc{position:absolute;bottom:18px;left:0;right:0;text-align:center;color:#fff;font-size:14px}
+.hero{cursor:zoom-in}.hero .wrap{pointer-events:none}.herobox{pointer-events:auto;cursor:default}
+img.zoom{cursor:zoom-in}
+.xp{position:absolute;top:14px;left:14px;z-index:4;border:0;background:rgba(255,255,255,.92);color:var(--navy);width:36px;height:36px;border-radius:50%;font-size:17px;font-weight:800;cursor:zoom-in}
+.hint{position:absolute;left:20px;top:16px;z-index:3;background:rgba(0,0,0,.45);color:#fff;font-size:12.5px;padding:4px 10px;border-radius:6px}
+
+.plink{color:#fff;font-weight:700;font-size:14px;text-decoration:none;border-bottom:1.5px solid rgba(255,255,255,.6);display:inline-block;margin:0 0 10px}
+body.clean .confirm,body.clean .real{display:none!important}
+body.clean .factcheck{display:none}
+.notes{display:inline-flex;margin-left:10px;border:1.5px solid #1b1b1b;border-radius:999px;overflow:hidden;vertical-align:middle}
+.notes button{border:0;background:transparent;font-weight:800;font-size:12px;padding:2px 10px;cursor:pointer}
+.notes button.on{background:#1b1b1b;color:var(--gold)}
+.cell.gap{background:#F7F9FC!important;border:1px dashed #E2E8F0!important}
+
+nav.main a{font-size:14px;padding:8px 8px}
+body.optB nav.main a{font-size:12.5px;padding:8px 7px}
+.ev{display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:10px}
+.evd{background:var(--navy);color:#fff;border-radius:8px;text-align:center;padding:6px 4px;line-height:1.15}
+.evd b{display:block;font-size:14px}.evd span{font-size:11px;opacity:.85}
+.ev small{color:var(--mut)}
+.more{display:inline-block;margin-top:8px;font-weight:700;color:var(--navy);text-decoration:none;border-bottom:2px solid var(--red)}
+.spot{position:relative;height:260px;border-radius:14px;background-size:cover;background-position:center 35%;margin-bottom:12px}
+.gal{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.gal div{aspect-ratio:4/3;border-radius:10px;background-size:cover;background-position:center;cursor:zoom-in;position:relative}
+.gal div.vid{background:var(--navy);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;cursor:default;flex-direction:column;gap:6px;text-align:center;padding:8px}
+.gal div.vid i{font-style:normal;font-size:34px}
+.gal.mini{grid-template-columns:repeat(3,1fr);gap:6px}
+@media(max-width:760px){.gal{grid-template-columns:repeat(2,1fr)}}
+.minic{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;font-size:12px;font-weight:700;color:var(--navy)}
+.minic img{width:48px;height:48px;object-fit:contain;display:block;margin:0 auto 2px}
+.ql{display:flex;gap:6px;flex-wrap:wrap}
+.ql a{font-size:13px;font-weight:700;color:var(--navy);text-decoration:none;border:1.5px solid var(--line);background:#fff;padding:5px 10px;border-radius:999px}
+.ql a:hover{border-color:var(--navy)}
+.next{display:flex;align-items:center;gap:16px;background:linear-gradient(90deg,var(--navy),var(--navy2));color:#fff;padding:14px 20px;flex-wrap:wrap}
+.next .lbl{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:var(--red);padding:3px 8px;border-radius:4px}
+.next img{width:40px;height:40px;object-fit:contain;background:#fff;border-radius:50%;padding:2px}
+.next b{font-size:17px}.next small{opacity:.85}
+.fx .next{margin:10px -16px 6px;border-radius:0}
+
+.bgrid>div{display:flex;flex-direction:column}
+.ncards2{flex:1;min-height:240px;display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.ncards2 .nc{height:auto;min-height:240px}
+@media(max-width:620px){.ncards2{grid-template-columns:1fr}}
+
+.ps{flex-direction:column;border-style:solid!important;color:var(--navy);text-decoration:none;text-align:center;padding:8px;gap:2px}
+a.ps:hover{border-color:var(--navy)!important}
+.ps .pn{font-size:16px;font-weight:900;letter-spacing:.01em;line-height:1.15}
+.ps small{font-weight:600;color:var(--mut);font-size:11.5px;line-height:1.3}
+.slots{grid-template-columns:repeat(3,1fr)}
+.slot{min-height:110px}
+.plist{margin:0;padding-left:18px;line-height:1.7}
+
+.secmap{display:inline-block;white-space:nowrap;vertical-align:middle;font-size:11.5px;font-weight:800;letter-spacing:.02em;color:#0B5A3A;background:#E3F1E8;border:1px solid #A8D5B8;border-radius:999px;padding:2px 9px;margin-left:8px;text-decoration:none;text-transform:none}
+h2 .secmap{font-size:12px}
+.tchip{position:absolute;top:14px;right:14px;z-index:4;margin:0}
+.nc .tchip{top:10px;right:10px}
+.bar .secmap{font-size:13px}
+body.clean .secmap{display:none!important}
+#p-home .card,#p-home .club{cursor:pointer}
+#p-home .card:hover,#p-home .club:hover{border-color:var(--navy)}
+
+/* navy menu bar in both layouts */
+header{background:var(--navy)!important;border-bottom:1px solid rgba(255,255,255,.14)!important}
+@media(max-width:980px){.lang{align-self:flex-start}}
+nav.main a{color:#fff!important}
+nav.main a:hover,nav.main a.on{background:rgba(255,255,255,.14)!important}
+.lang{border-color:#fff!important}.lang button{background:transparent!important;color:#fff!important}.lang button.on{background:#fff!important;color:var(--navy)!important}
+.burger{color:#fff!important}
+body:not(.optB) .brand span{color:#fff}
+body:not(.optB) .brand small{color:#F7A8B2}
+body:not(.optB) .brand img{background:#fff;border-radius:10px;padding:4px}
+@media(max-width:980px){nav.main{background:var(--navy)!important}}
+
+.flash{animation:fl 1.8s ease}
+@keyframes fl{0%,40%{box-shadow:0 0 0 4px var(--red)}100%{box-shadow:0 0 0 0 transparent}}
+.try a.trylink{color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.4)}
+[data-go]:hover{border-color:var(--navy)!important}
+footer h4 a{color:#fff;text-decoration:none}
+.tt-narrow{right:auto!important;max-width:58%;font-size:clamp(15px,1.5vw,21px)!important}
+@media(max-width:860px){.tt-narrow{max-width:none;right:24px!important}}
+
+/* review notes removed for presentation */
+.confirm,.real,.sample,.secmap,.factcheck{display:none!important}
+
+.soc{display:flex;gap:5px;margin-left:8px}
+nav.main{flex-wrap:nowrap!important;align-items:center}
+nav.main>a{padding:8px 7px!important;font-size:13.5px!important;white-space:nowrap}
+body.optB nav.main>a{font-size:12px!important;padding:8px 6px!important}
+body:not(.optB) .brand span{font-size:12.5px;white-space:nowrap}
+body:not(.optB) .brand img{height:44px}
+.soc a{flex:none}
+@media(max-width:1300px) and (min-width:981px){nav.main>a{padding:8px 5px!important;font-size:13px!important}body.optB nav.main>a{font-size:11.5px!important;padding:8px 5px!important}.soc{gap:3px;margin-left:5px}nav.main .soc a{width:26px;height:26px}}
+.hbar{gap:14px!important}
+@media(max-width:980px){nav.main{flex-wrap:wrap!important;align-items:flex-start!important}.soc{margin:8px 0 0}}
+nav.main .soc a{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%!important;color:#fff!important;padding:0!important;background:rgba(255,255,255,.12)}
+nav.main .soc a:hover{background:var(--red)!important}
+.soc a:hover{background:var(--red)!important}
+.soc svg{width:14px;height:14px}
+
+
+.kc-cal{overflow-x:auto;background:#fff;border:1px solid #DCE3EC;border-radius:14px;padding:14px}
+.kc-grid{display:grid;gap:3px;align-items:center;min-width:max-content}
+.kc-wk{font-size:11px;color:#5A6B85;text-align:center;line-height:1.15;height:30px;display:flex;flex-direction:column;justify-content:flex-end}
+.kc-wk b{color:#0B2D5B;font-size:11.5px}
+.kc-row{font-size:13px;font-weight:700;color:#0B2D5B;display:flex;align-items:center;gap:8px;padding-right:8px}
+.kc-row i{width:10px;height:10px;border-radius:50%;flex:none}
+.kc-cell{height:38px;background:#F3F6FA;border-radius:6px;display:flex;flex-wrap:wrap;gap:3px;align-items:center;justify-content:center;padding:3px}
+.kc-dot{width:13px;height:13px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.08);cursor:pointer;padding:0}
+.kc-dot:hover,.kc-dot.on{transform:scale(1.35);box-shadow:0 0 0 2px #0B2D5B}
+.kc-detail{margin-top:10px;background:#F3F6FA;border-radius:10px;padding:10px 14px;font-size:14.5px;color:#14213A;min-height:22px}
+.kc-tag{color:#fff;font-size:11px;font-weight:800;padding:2px 8px;border-radius:4px}
+.kc-res{color:#D7263D;font-weight:700}
+.kc-sc{margin-left:6px;font-weight:700;color:#0B2D5B}
+</style>
+<meta property="og:title" content="A new website for Icelandic cricket (prototype)">
+<meta property="og:description" content="Prototype for the board of Krikketsamband Íslands, by Marina Ermina.">
+<meta property="og:image" content="https://mermina.github.io/krikket-prototype/media/share-picture.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:alt" content="Iceland national cricket team throwing their caps in the air">
+</head>
+<body>
+<div class="proto"><span lang="en"><b>Prototype</b> for the board of Krikketsamband Íslands · 18 Nov 2026 · by Marina Ermina</span><span lang="is"><b>Frumgerð</b> fyrir stjórn Krikketsambands Íslands · 18. nóv. 2026 · Marina Ermina</span></div>
+<header>
+<div class="wrap hbar">
+<a class="brand" href="#home"><img alt="Iceland Cricket" src="media/iceland-cricket-logo.png"/><span><span lang="en">Icelandic Cricket Association</span><span lang="is">Krikketsamband Íslands</span><small><span lang="en">KRIKKETSAMBAND ÍSLANDS</span><span lang="is">ICELAND CRICKET</span></small></span></a>
+<button aria-label="Menu" class="burger" onclick="document.querySelector('nav.main').classList.toggle('open')">☰</button>
+<nav class="main">
+<a href="#about"><span lang="en">About</span><span lang="is">Um okkur</span></a>
+<a href="#matches"><span lang="en">Matches</span><span lang="is">Leikir</span></a>
+<a href="#teams"><span lang="en">Teams &amp; Players</span><span lang="is">Lið og leikmenn</span></a>
+<a href="#stats"><span lang="en">Statistics</span><span lang="is">Tölfræði</span></a>
+<a href="#news"><span lang="en">News &amp; Media</span><span lang="is">Fréttir</span></a>
+<a href="#play"><span lang="en">Play Cricket</span><span lang="is">Spilaðu krikket</span></a>
+<a href="#partners"><span lang="en">Partners</span><span lang="is">Samstarfsaðilar</span></a>
+<a href="#contact"><span lang="en">Contact</span><span lang="is">Samband</span></a>
+<div class="lang"><button class="on" data-l="en">EN</button><button data-l="is">IS</button></div>
+<div class="soc"><a aria-label="Facebook" href="https://www.facebook.com/icelandcricket" rel="noopener" target="_blank" title="Facebook"><svg fill="currentColor" viewbox="0 0 24 24"><path d="M14 8h3V4h-3c-2.8 0-4.5 1.8-4.5 4.6V11H7v4h2.5v9h4v-9h3l.5-4h-3.5V8.8c0-.5.3-.8.5-.8z"></path></svg></a><a aria-label="Instagram" href="https://www.instagram.com/icelandcricket/" rel="noopener" target="_blank" title="Instagram"><svg fill="currentColor" viewbox="0 0 24 24"><rect fill="none" height="18" rx="5" stroke="currentColor" stroke-width="2" width="18" x="3" y="3"></rect><circle cx="12" cy="12" fill="none" r="4" stroke="currentColor" stroke-width="2"></circle><circle cx="17.3" cy="6.7" r="1.2"></circle></svg></a><a aria-label="X" href="https://x.com/icelandcricket" rel="noopener" target="_blank" title="X"><svg fill="currentColor" viewbox="0 0 24 24"><path d="M4 3h4.5l4 5.6L17.3 3H20l-6.2 7.2L21 21h-4.5l-4.4-6.1L6.8 21H4l7-8.1z"></path></svg></a><a aria-label="Bluesky" href="https://bsky.app/profile/icelandcricket.bsky.social" rel="noopener" target="_blank" title="Bluesky"><svg fill="currentColor" viewbox="0 0 24 24"><path d="M6.3 4.6C8.8 6.5 11.4 10.3 12 12c.6-1.7 3.2-5.5 5.7-7.4 1.8-1.4 4.7-2.4 4.7.9 0 .7-.4 5.5-.6 6.3-.8 2.8-3.6 3.5-6.1 3.1 4.4.7 5.5 3.2 3.1 5.7-4.6 4.7-6.6-1.2-7.1-2.7l-.1-.3-.1.3c-.5 1.5-2.5 7.4-7.1 2.7-2.4-2.5-1.3-5 3.1-5.7-2.5.4-5.3-.3-6.1-3.1-.2-.8-.6-5.6-.6-6.3 0-3.3 2.9-2.3 4.7-.9z"></path></svg></a></div>
+</nav>
+</div>
+</header>
+<!-- ================= HOME ================= -->
+<main class="page on" id="p-home">
+<div class="onlyB">
+<div class="mosaic">
+<a class="tile big" href="#matches/international" style="background-image:url(media/match-mcc-bowler.jpg)"><button aria-label="Enlarge" class="xp" data-src="media/match-mcc-bowler.jpg">⤢</button>
+<div class="tt"><span lang="en">Iceland v Marylebone Cricket Club: three matches in Reykjavík</span><span lang="is">Ísland gegn Marylebone Cricket Club: þrír leikir í Reykjavík</span></div>
+<div class="tx"><span lang="en">14–16 August 2026: a T20, a 100-over declaration match and a 40-over game against one of cricket's most famous clubs.</span><span lang="is">14.–16. ágúst 2026: T20-leikur, 100 yfira leikur og 40 yfira leikur gegn einu þekktasta krikketfélagi heims.</span> </div></a>
+<a class="tile" href="#play/training" style="background-image:url(media/kids-camp-photo.jpg);background-position:center 8%"><button aria-label="Enlarge" class="xp" data-src="media/kids-camp-photo.jpg">⤢</button><div class="tt tt-narrow"><span lang="en">Cricket camp for kids, ages 7–15, Saturdays at Fellaskóli</span><span lang="is">Krikketbúðir fyrir börn, 7–15 ára, laugardaga í Fellaskóla</span></div></a>
+<a class="tile" href="#teams/national" style="background-image:url(media/national-team-caps.jpg);background-position:center 35%"><button aria-label="Enlarge" class="xp" data-src="media/national-team-caps.jpg">⤢</button><div class="tt"><span lang="en">A stronger, more inclusive Iceland through sport</span><span lang="is">Sterkara Ísland fyrir alla, í gegnum íþróttir</span></div></a>
+</div>
+<section><div class="wrap bgrid">
+<div><div class="bar"><span lang="en">Latest News</span><span lang="is">Nýjustu fréttir</span> </div>
+<div class="ncards">
+<a class="nc" href="#matches/international" style="background-image:url(media/teams-in-whites.jpg);background-position:center 45%"><div><span lang="en">Iceland v MCC, 14–16 Aug</span><span lang="is">Ísland gegn MCC, 14.–16. ág.</span><small><span lang="en">National team · Aug 2026</span><span lang="is">Landslið · ág. 2026</span></small></div></a>
+<a class="nc" href="#play/training" style="background-image:url(media/kids-camp-photo.jpg);background-position:center 30%"><div><span lang="en">Kids camp starts in September</span><span lang="is">Krikketbúðir barna hefjast í september</span><small><span lang="en">Juniors · Sep 2026</span><span lang="is">Ungmenni · sept. 2026</span></small></div></a>
+<a class="nc" href="#teams/clubs" style="background:#111 url(media/club-ravens.png) center 38%/45% no-repeat"><div><span lang="en">Welcome, Mosfellsbær Ravens</span><span lang="is">Velkomin, Mosfellsbær Ravens</span><small></small></div></a>
+</div>
+<div class="ncards2">
+<a class="nc" href="#teams/squad" style="background-image:url(media/national-team-squad.jpg);background-position:center 35%"><div><span lang="en">National team spotlight: the squad that faced MCC</span><span lang="is">Landsliðið í sviðsljósinu: hópurinn sem mætti MCC</span><small><span lang="en">National team</span><span lang="is">Landslið</span></small></div></a>
+<a class="nc" href="#play/start" style="background-image:url(media/match-action-mountains.jpg);background-position:center 88%"><div><span lang="en">New to cricket? Find a club and come to a session</span><span lang="is">Nýr í krikket? Finndu félag og mættu á æfingu</span><small><span lang="en">Play cricket</span><span lang="is">Spilaðu krikket</span></small></div></a>
+</div></div>
+<div><div class="bar"><span lang="en">Fixtures &amp; Results</span><span lang="is">Leikir og úrslit</span> </div>
+<div class="fx" id="fx"></div>
+<p style="font-size:13px;color:var(--mut)"> <span lang="en">Scores by CricHeroes</span><span lang="is">Úrslit frá CricHeroes</span> </p><p class="ql"><a href="#matches/fixtures"><span lang="en">Fixtures</span><span lang="is">Leikir</span></a><a href="#matches/standings"><span lang="en">Standings</span><span lang="is">Stöðutöflur</span></a><a href="#stats/winners"><span lang="en">Statistics</span><span lang="is">Tölfræði</span></a><a href="#matches/scorecards"><span lang="en">Scorecards ↗</span><span lang="is">Skorkort ↗</span></a></p></div>
+</div></section>
+</div>
+<div class="hero onlyA">
+<div class="slides" id="slides"></div>
+<div class="cap" id="cap"></div>
+<div class="hctl"><button aria-label="Previous" id="prev">‹</button><div class="dots" id="dots"></div><button aria-label="Next" id="next">›</button></div>
+<div class="wrap"><div class="herobox">
+<span class="kick"><span lang="en">The home of Icelandic cricket</span><span lang="is">Heimili krikkets á Íslandi</span></span> 
+<h1><span lang="en">Cricket at 64° North</span><span lang="is">Krikket á 64. breiddargráðu</span></h1>
+<p><span lang="en">A stronger, more inclusive Iceland through sport. Come and play, watch or support.</span><span lang="is">Sterkara Ísland fyrir alla, í gegnum íþróttir. Komdu að spila, horfa eða styðja.</span></p>
+<a class="btn red" href="#play/start"><span lang="en">Start playing</span><span lang="is">Byrjaðu að spila</span></a>
+<a class="btn white" href="#matches/fixtures"><span lang="en">Fixtures &amp; results</span><span lang="is">Leikir og úrslit</span></a>
+<br/><a class="plink" href="#partners/sponsor"><span lang="en">Become a partner →</span><span lang="is">Gerast samstarfsaðili →</span></a>
+</div></div></div>
+<div class="wrap onlyA">
+<div class="mc">
+<div class="mchead">
+<div class="tabs"><button data-t="live"><span lang="en">Live</span><span lang="is">Í beinni</span></button><button class="on" data-t="res"><span lang="en">Results</span><span lang="is">Úrslit</span></button><button data-t="sch"><span lang="en">Schedule</span><span lang="is">Leikjadagskrá</span></button></div>
+<div class="mcnote"> <span lang="en">Scores by CricHeroes</span><span lang="is">Úrslit frá CricHeroes</span></div>
+</div>
+<div class="next" id="nxm"></div><div class="mlist" id="mlist"></div>
+<div class="mcfoot"><span><span lang="en">Indoor sessions in winter; the outdoor season starts in summer.</span><span lang="is">Æfingar innanhúss í vetur; útitímabilið hefst í sumar.</span> </span><span class="ql"><a href="#matches/fixtures"><span lang="en">Fixtures</span><span lang="is">Leikir</span></a><a href="#matches/standings"><span lang="en">Standings</span><span lang="is">Stöðutöflur</span></a><a href="#stats/winners"><span lang="en">Statistics</span><span lang="is">Tölfræði</span></a><a href="#matches/scorecards"><span lang="en">Scorecards ↗</span><span lang="is">Skorkort ↗</span></a></span></div>
+</div>
+</div>
+<section class="onlyA">
+<div class="wrap">
+<h2><span lang="en">Latest news</span><span lang="is">Nýjustu fréttir</span> </h2>
+<p class="sub"><span lang="en">The latest from Icelandic cricket.</span><span lang="is">Það nýjasta úr íslensku krikketi.</span></p>
+<div class="grid3">
+<div class="card" data-go="matches/international"><div class="im" style="background:url(media/match-mcc-bowler.jpg) center 40%/cover"></div><div class="bd"><div class="tag"><span lang="en">National team</span><span lang="is">Landslið</span></div><h3><span lang="en">Iceland v Marylebone Cricket Club</span><span lang="is">Ísland gegn Marylebone Cricket Club</span></h3><p><span lang="en">Reykjavík, 14–16 August 2026: a T20, a 100-over declaration match and a 40-over game.</span><span lang="is">Reykjavík, 14.–16. ágúst 2026: T20-leikur, 100 yfira leikur og 40 yfira leikur.</span>  </p></div></div>
+<div class="card" data-go="play/training"><div class="im" style="background:url(media/kids-camp-photo.jpg) center 35%/cover"></div><div class="bd"><div class="tag"><span lang="en">Juniors</span><span lang="is">Ungmenni</span></div><h3><span lang="en">Cricket camp for kids</span><span lang="is">Krikketbúðir fyrir börn</span></h3><p><span lang="en">Ages 7–15, boys and girls. Saturdays 9:00–11:00 at Fellaskóli, from September 2026. No experience needed, equipment provided.</span><span lang="is">7–15 ára, strákar og stelpur. Laugardaga kl. 9:00–11:00 í Fellaskóla, frá september 2026. Engin reynsla nauðsynleg, búnaður á staðnum.</span> </p></div></div>
+<div class="card" data-go="teams/clubs"><div class="im" style="background:#111"><img alt="" src="media/club-ravens.png" style="max-height:120px"/></div><div class="bd"><div class="tag"><span lang="en">Clubs</span><span lang="is">Félög</span></div><h3><span lang="en">Welcome, Mosfellsbær Ravens</span><span lang="is">Velkomin, Mosfellsbær Ravens</span></h3><p><span lang="en">Iceland's newest cricket club (est. 2026) joins the domestic competitions.</span><span lang="is">Nýjasta krikketfélag landsins (stofnað 2026) bætist í innlendu keppnirnar.</span> </p></div></div>
+</div>
+</div>
+</section>
+<section class="alt">
+<div class="wrap two">
+<div>
+<h2><span lang="en">Upcoming tournaments &amp; events</span><span lang="is">Næstu mót og viðburðir</span> </h2>
+<p class="sub"><span lang="en">What's coming up, from training to trophies.</span><span lang="is">Það sem er framundan, frá æfingum til titla.</span></p>
+<div class="ev" data-go="play/training"><div class="evd"><b><span lang="en">Sat</span><span lang="is">Lau</span></b><span>9:00</span></div><div><b><span lang="en">Cricket camp for kids (7–15)</span><span lang="is">Krikketbúðir fyrir börn (7–15 ára)</span></b><br/><small><span lang="en">Every Saturday from September 2026 · Fellaskóli</span><span lang="is">Alla laugardaga frá september 2026 · Fellaskóli</span></small> </div></div>
+<div class="ev" data-go="matches/domestic"><div class="evd"><b><span lang="en">Winter</span><span lang="is">Vetur</span></b><span><span lang="en">indoor</span><span lang="is">inni</span></span></div><div><b>Volcanic Ashes</b><br/><small><span lang="en">Indoor competition</span><span lang="is">Innanhússmót</span></small> </div></div>
+<div class="ev" data-go="matches/domestic"><div class="evd"><b><span lang="en">June</span><span lang="is">Júní</span></b><span>2027</span></div><div><b>Summer Solstice Sixes</b><br/><small><span lang="en">Six-a-side around midsummer</span><span lang="is">Sex í liði um sumarsólstöður</span></small> </div></div>
+<div class="ev" data-go="matches/fixtures"><div class="evd"><b>2027</b><span><span lang="en">season</span><span lang="is">tímabil</span></span></div><div><b>Íslensk Premier League · Sixty Ball Shootout</b><br/><small><span lang="en">League fixtures published on CricHeroes</span><span lang="is">Leikjadagskrá birt á CricHeroes</span></small> </div></div>
+<a class="more" href="#matches/fixtures"><span lang="en">Full calendar →</span><span lang="is">Öll dagskráin →</span></a>
+</div>
+<div>
+<h2><span lang="en">National team spotlight</span><span lang="is">Landsliðið í sviðsljósinu</span> </h2>
+<p class="sub"><span lang="en">Iceland v Marylebone Cricket Club, Reykjavík, 14–16 August 2026.</span><span lang="is">Ísland gegn Marylebone Cricket Club, Reykjavík, 14.–16. ágúst 2026.</span> </p>
+<div class="spot" style="background-image:url(media/national-team-squad.jpg)"><button aria-label="Enlarge" class="xp" data-src="media/national-team-squad.jpg">⤢</button></div>
+<p><span lang="en">A T20, a 100-over declaration match and a 40-over game against one of cricket's most famous clubs.</span><span lang="is">T20-leikur, 100 yfira leikur og 40 yfira leikur gegn einu þekktasta krikketfélagi heims.</span> </p>
+<a class="more" href="#teams/squad"><span lang="en">Meet the squad →</span><span lang="is">Kynntu þér hópinn →</span></a>
+</div>
+</div>
+</section>
+<section>
+<div class="wrap">
+<div class="try">
+<div>
+<span class="kick"><span lang="en">New to cricket?</span><span lang="is">Nýr í krikket?</span></span>
+<h2><span lang="en">Try cricket in Iceland</span><span lang="is">Prófaðu krikket á Íslandi</span> </h2>
+<p><span lang="en">Never played before? Tell us where you live and we will help you find a club and a first session.</span><span lang="is">Aldrei spilað áður? Segðu okkur hvar þú býrð og við hjálpum þér að finna félag og fyrstu æfingu.</span></p>
+<a class="btn red" href="#play/start"><span lang="en">How to start</span><span lang="is">Hvernig byrja ég?</span></a>
+</div>
+<ul>
+<li><a class="trylink" href="#play/guide"><span lang="en">Beginner's guide to the game</span><span lang="is">Byrjendaleiðbeiningar</span> →</a></li>
+<li><a class="trylink" href="#play/find"><span lang="en">Find a club near you</span><span lang="is">Finndu félag nálægt þér</span> →</a></li>
+<li><a class="trylink" href="#play/training"><span lang="en">Kids camp, ages 7–15, Saturdays</span><span lang="is">Krikketbúðir barna, 7–15 ára, laugardaga</span> →</a></li>
+<li><a class="trylink" href="#contact/general"><span lang="en">Visiting teams &amp; cricket tours</span><span lang="is">Gestalið og krikketferðir</span> →</a></li>
+</ul>
+</div>
+</div>
+</section>
+<section>
+<div class="wrap">
+<h2><span lang="en">Join a club</span><span lang="is">Gakktu í félag</span> </h2>
+<p class="sub"><span lang="en">Six clubs across the capital area. Pick the one nearest you.</span><span lang="is">Sex félög á höfuðborgarsvæðinu. Veldu það sem er næst þér.</span> </p>
+<div class="clubs" id="clubs"></div>
+</div>
+</section>
+<section>
+<div class="wrap">
+<h2><span lang="en">Latest photos &amp; videos</span><span lang="is">Nýjustu myndir og myndbönd</span> </h2>
+<p class="sub"><span lang="en">Click a photo to enlarge.</span><span lang="is">Smelltu á mynd til að stækka.</span></p>
+<div class="gal" id="gal"></div>
+<a class="more" href="#news/galleries"><span lang="en">All galleries &amp; videos →</span><span lang="is">Öll myndasöfn og myndbönd →</span></a>
+</div>
+</section>
+<section class="alt">
+<div class="wrap partners">
+<div>
+<h2><span lang="en">Partners &amp; supporters</span><span lang="is">Samstarfsaðilar og stuðningsaðilar</span> </h2>
+<p class="sub"><span lang="en">Thank you to everyone who makes cricket in Iceland possible.</span><span lang="is">Takk til allra sem gera krikket á Íslandi mögulegt.</span></p>
+<a class="btn navy" href="#partners/sponsor"><span lang="en">Become a sponsor</span><span lang="is">Gerast styrktaraðili</span></a>
+<a class="btn" href="#partners/donate" style="border:2px solid var(--navy);color:var(--navy)"><span lang="en">Support us</span><span lang="is">Styrktu okkur</span></a>
+</div>
+<div class="slots"><div class="slot ps"><span class="pn">BARA TALA</span><small><span lang="en">On the national &amp; junior kit</span><span lang="is">Á landsliðs- og unglingabúningi</span></small></div><a class="slot ps" href="https://shalimar.is" rel="noopener" target="_blank"><span class="pn">Ibrahim's Shalimar</span><small><span lang="en">Sixty Ball Shootout sponsor (2025) ↗</span><span lang="is">Styrktaraðili Sixty Ball Shootout (2025) ↗</span></small></a><div class="slot ps"><span class="pn">Indian Food Box</span><small><span lang="en">Match-ball sponsor (2024)</span><span lang="is">Boltastyrktaraðili (2024)</span></small></div><a class="slot ps" href="https://www.s66sportswear.co.uk/icelandcricket" rel="noopener" target="_blank"><span class="pn">S66 Sportswear</span><small><span lang="en">Official merchandise ↗</span><span lang="is">Opinber varningur ↗</span></small></a><div class="slot"><span lang="en">Partner</span><span lang="is">Samstarfsaðili</span></div><div class="slot"><span lang="en">Your logo</span><span lang="is">Þitt merki</span></div></div>
+</div>
+</section>
+</main>
+<!-- ================= ABOUT ================= -->
+<main class="page" id="p-about">
+<div class="phead"><div class="wrap"><span class="kick"><span lang="en">7 · About</span><span lang="is">7 · Um okkur</span></span><h1><span lang="en">About the Icelandic Cricket Association</span><span lang="is">Um Krikketsamband Íslands</span></h1><p><span lang="en">An amateur association run by an elected board of volunteers, overseeing domestic teams and competitions in Iceland.</span><span lang="is">Áhugamannasamband rekið af kjörinni stjórn sjálfboðaliða, sem hefur umsjón með innlendum liðum og mótum á Íslandi.</span> </p></div></div>
+<section><div class="wrap"><div class="grid3">
+<div class="box"><h3><span lang="en">Who we are</span><span lang="is">Hver við erum</span></h3><p><span lang="en">Short introduction to cricket in Iceland and the association.</span><span lang="is">Stutt kynning á krikket á Íslandi og sambandinu.</span></p></div>
+<div class="box"><h3><span lang="en">Mission, vision &amp; strategy</span><span lang="is">Markmið, framtíðarsýn og stefna</span></h3><p><span lang="en">A stronger, more inclusive Iceland through sport.</span><span lang="is">Sterkara Ísland fyrir alla, í gegnum íþróttir.</span></p></div>
+<div class="box"><h3><span lang="en">Board &amp; committee members</span><span lang="is">Stjórn og nefndir</span> </h3><table class="t"><tbody><tr><td><span lang="en">Chair</span><span lang="is">Formaður</span></td><td>Bala Kamallakharan</td></tr><tr><td><span lang="en">Vice chair</span><span lang="is">Varaformaður</span></td><td>Samuel Gill</td></tr><tr><td><span lang="en">Secretary</span><span lang="is">Ritari</span></td><td>David Cook</td></tr><tr><td><span lang="en">Treasurer</span><span lang="is">Gjaldkeri</span></td><td>Lakmal Amaratunga</td></tr></tbody></table></div>
+<div class="box"><h3><span lang="en">Governance &amp; constitution</span><span lang="is">Stjórnarhættir og lög</span></h3><p><span lang="en">The constitution and annual meeting minutes as downloadable PDFs.</span><span lang="is">Lög og fundargerðir aðalfunda sem PDF-skjöl.</span></p></div>
+<div class="box"><h3><span lang="en">Policies &amp; codes of conduct</span><span lang="is">Stefnur og siðareglur</span></h3><p><span lang="en">Safeguarding, anti-doping, code of conduct and privacy, as PDFs.</span><span lang="is">Barnavernd, lyfjaeftirlit, siðareglur og persónuvernd, sem PDF-skjöl.</span></p></div>
+<div class="box"><h3><span lang="en">Icelandic cricket history</span><span lang="is">Saga krikkets á Íslandi</span></h3><p><span lang="en">From Kylfan in 2000 to six clubs today. The interactive club timeline is on the Statistics page.</span><span lang="is">Frá Kylfunni árið 2000 til sex félaga í dag. Gagnvirk tímalína félaganna er á tölfræðisíðunni.</span></p><a class="more" href="#stats"><span lang="en">See the timeline →</span><span lang="is">Sjá tímalínuna →</span></a></div>
+<div class="box"><h3><span lang="en">Contact the association</span><span lang="is">Hafa samband</span></h3><p><a href="mailto:secretary@krikket.is">secretary@krikket.is</a></p><a class="more" href="#contact"><span lang="en">All contacts →</span><span lang="is">Allir tengiliðir →</span></a></div>
+</div></div></section>
+</main>
+<!-- ================= MATCHES ================= -->
+<main class="page" id="p-matches">
+<div class="phead ph-img" style="background-image:linear-gradient(180deg,rgba(11,45,91,.1),rgba(11,45,91,.9)),url(media/match-action-mountains.jpg)"><div class="wrap"><span class="kick"><span lang="en">2 · Matches &amp; Competitions</span><span lang="is">2 · Leikir og mót</span></span><h1><span lang="en">Matches &amp; Competitions</span><span lang="is">Leikir og mót</span></h1><p><span lang="en">Fixtures, results and scorecards, linked to CricHeroes where every match is scored.</span><span lang="is">Leikir, úrslit og skorkort, tengd við CricHeroes þar sem allir leikir eru skráðir.</span></p></div></div>
+<section><div class="wrap"><div class="grid3">
+<div class="box"><h3><span lang="en">Fixtures &amp; calendar</span><span lang="is">Leikjadagskrá</span></h3><p><span lang="en">All upcoming matches and events in one calendar.</span><span lang="is">Allir næstu leikir og viðburðir í einu dagatali.</span></p></div>
+<div class="box"><h3><span lang="en">Live scores &amp; streams</span><span lang="is">Bein úrslit og streymi</span></h3><p><span lang="en">Follow every match live, ball by ball, on match day.</span><span lang="is">Fylgstu með hverjum leik í beinni á leikdegi.</span></p></div>
+<div class="box"><h3><span lang="en">Match centre / scorecards</span><span lang="is">Leikjamiðstöð og skorkort</span></h3><p><span lang="en">Every result links to its full CricHeroes scorecard.</span><span lang="is">Hver úrslit tengjast fullu skorkorti á CricHeroes.</span></p></div>
+<div class="box"><h3><span lang="en">Results archive</span><span lang="is">Úrslitasafn</span></h3><p><span lang="en">Past results by season, and tournament winners since 2015.</span><span lang="is">Fyrri úrslit eftir tímabilum og sigurvegarar móta frá 2015.</span></p></div>
+<div class="box"><h3><span lang="en">League standings</span><span lang="is">Stöðutöflur</span></h3><p><span lang="en">League tables, from CricHeroes.</span><span lang="is">Stöðutöflur frá CricHeroes.</span></p></div>
+<div class="box"><h3><span lang="en">Domestic tournaments</span><span lang="is">Innlend mót</span> </h3><table class="t"><tbody><tr><td>Íslensk Premier League</td><td>T20</td></tr><tr><td>Sixty Ball Shootout</td><td>T10</td></tr><tr><td>Summer Solstice Sixes</td><td><span lang="en">6-a-side</span><span lang="is">6 í liði</span></td></tr><tr><td>Volcanic Ashes</td><td><span lang="en">Indoor</span><span lang="is">Innanhúss</span></td></tr><tr><td>Samuel Gill Trophy</td><td><span lang="en">Exhibition</span><span lang="is">Sýningarleikur</span></td></tr></tbody></table></div>
+<div class="box"><h3><span lang="en">International fixtures</span><span lang="is">Landsleikir</span> </h3><p><span lang="en">Iceland v Marylebone Cricket Club, 14–16 August 2026: T20, 100-over and 40-over matches.</span><span lang="is">Ísland gegn Marylebone Cricket Club, 14.–16. ágúst 2026: T20, 100 yfira og 40 yfira leikir.</span></p></div>
+</div></div></section>
+<section class="alt" id="matches-season"><div class="wrap">
+<h2><span lang="en">2027 season at a glance</span><span lang="is">Tímabilið 2027 í hnotskurn</span></h2>
+<p class="sub"><span lang="en">Every match of the summer, coloured by competition. Click a dot to see the match.</span><span lang="is">Allir leikir sumarsins, litaðir eftir mótum. Smelltu á punkt til að sjá leikinn.</span></p>
+<div id="seasoncal"></div>
+</div></section>
+</main>
+<!-- ================= TEAMS ================= -->
+<main class="page" id="p-teams">
+<div class="phead ph-img" style="background-image:linear-gradient(180deg,rgba(11,45,91,.1),rgba(11,45,91,.9)),url(media/national-team-squad.jpg)"><div class="wrap"><span class="kick"><span lang="en">3 · Teams &amp; Players</span><span lang="is">3 · Lið og leikmenn</span></span><h1><span lang="en">Teams &amp; Players</span><span lang="is">Lið og leikmenn</span></h1><p><span lang="en">The national team, the clubs, and the people behind them.</span><span lang="is">Landsliðið, félögin og fólkið á bak við þau.</span></p></div></div>
+<section><div class="wrap"><div class="grid3">
+<div class="box"><h3><span lang="en">Iceland national team</span><span lang="is">Landslið Íslands</span></h3><img alt="Iceland national team" class="zoom" src="media/national-team-caps.jpg" style="width:100%;border-radius:10px"/></div>
+<div class="box"><h3><span lang="en">National squad &amp; player profiles</span><span lang="is">Landsliðshópur og leikmannasíður</span></h3><p><span lang="en">The squad, with a profile for every player: photo, role, club and career numbers.</span><span lang="is">Hópurinn, með síðu fyrir hvern leikmann: mynd, hlutverk, félag og ferilstölur.</span></p></div>
+<div class="box"><h3><span lang="en">Men's cricket</span><span lang="is">Karlakrikket</span></h3><p><span lang="en">National team fixtures and results, including the MCC series in August 2026.</span><span lang="is">Leikir og úrslit landsliðsins, þ.m.t. MCC-leikirnir í ágúst 2026.</span></p></div>
+<div class="box"><h3><span lang="en">Youth &amp; development squads (as it develops)</span><span lang="is">Unglinga- og þróunarhópar (í þróun)</span> </h3><p><span lang="en">Cricket camp for kids aged 7–15, Saturdays 9:00–11:00 at Fellaskóli, from September 2026.</span><span lang="is">Krikketbúðir fyrir 7–15 ára, laugardaga kl. 9:00–11:00 í Fellaskóla, frá september 2026.</span></p></div>
+<div class="box"><h3><span lang="en">Women’s cricket (as it develops)</span><span lang="is">Kvennakrikket (í þróun)</span></h3><p><span lang="en">Women's cricket in Iceland, growing season by season.</span><span lang="is">Kvennakrikket á Íslandi, vex með hverju tímabili.</span></p></div>
+<div class="box"><h3><span lang="en">Domestic clubs &amp; teams</span><span lang="is">Innlend félög og lið</span> </h3><div class="minic" id="minic"></div></div>
+<div class="box"><h3><span lang="en">Club player statistics &amp; records</span><span lang="is">Tölfræði og met leikmanna félaga</span></h3><p><span lang="en">From CricHeroes, per club.</span><span lang="is">Frá CricHeroes, eftir félögum.</span></p></div>
+<div class="box"><h3><span lang="en">Coaching staff &amp; team management</span><span lang="is">Þjálfarar og liðsstjórn</span> </h3><p><span lang="en">Head coach: Keenan Botha.</span><span lang="is">Aðalþjálfari: Keenan Botha.</span></p></div>
+</div></div></section>
+</main>
+<!-- ================= STATS ================= -->
+<main class="page" id="p-stats">
+<div class="phead"><div class="wrap"><span class="kick"><span lang="en">4 · Statistics &amp; Records</span><span lang="is">4 · Tölfræði og met</span></span><h1><span lang="en">Statistics &amp; Records</span><span lang="is">Tölfræði og met</span></h1><p><span lang="en">Records, rankings and every tournament winner since 2015.</span><span lang="is">Met, röðun og allir sigurvegarar móta frá 2015.</span></p></div></div>
+<section><div class="wrap"><div class="grid3">
+<div class="box"><h3><span lang="en">All-time batting records</span><span lang="is">Kylfumet frá upphafi</span></h3><p><span lang="en">Most runs, highest scores, centuries.</span><span lang="is">Flest hlaup, hæstu skor, hundruð.</span></p></div>
+<div class="box"><h3><span lang="en">Bowling records</span><span lang="is">Kastmet</span></h3><p><span lang="en">Most wickets, best figures.</span><span lang="is">Flest wicket, besti árangur.</span></p></div>
+<div class="box"><h3><span lang="en">Fielding records</span><span lang="is">Grípamet</span></h3><p><span lang="en">Catches, stumpings, run-outs.</span><span lang="is">Grip, stumpings, run-outs.</span></p></div>
+<div class="box"><h3><span lang="en">Season statistics</span><span lang="is">Tölfræði tímabila</span></h3><p><span lang="en">Top performers each season.</span><span lang="is">Bestu leikmenn hvers tímabils.</span></p></div>
+<div class="box"><h3><span lang="en">Player rankings</span><span lang="is">Röðun leikmanna</span></h3><p><span lang="en">Ranking tables from match data.</span><span lang="is">Röðunartöflur út frá leikjagögnum.</span></p></div>
+<div class="box"><h3><span lang="en">Team records</span><span lang="is">Liðamet</span></h3><p><span lang="en">Highest and lowest totals, biggest wins.</span><span lang="is">Hæstu og lægstu skor, stærstu sigrar.</span></p></div>
+<div class="box"><h3><span lang="en">Tournament winners</span><span lang="is">Sigurvegarar móta</span> </h3><p><span lang="en">Every winner since 2015: see below.</span><span lang="is">Allir sigurvegarar frá 2015: sjá hér að neðan.</span></p></div>
+<div class="box"><h3><span lang="en">Historical scorecards</span><span lang="is">Eldri skorkort</span></h3><p><span lang="en">Old scorecards collected into one archive.</span><span lang="is">Eldri skorkort safnað í eitt safn.</span></p></div>
+<div class="box"><h3><span lang="en">National team performance</span><span lang="is">Árangur landsliðs</span></h3><p><span lang="en">All international results in one table.</span><span lang="is">Öll landsleikjaúrslit í einni töflu.</span></p></div>
+</div></div></section>
+<section>
+<div class="wrap">
+<h2><span lang="en">Tournament winners &amp; club history</span><span lang="is">Sigurvegarar móta og saga félaga</span></h2>
+<p class="sub"><span lang="en">Every domestic trophy winner and every club. Hover a badge for details.</span><span lang="is">Allir sigurvegarar innlendra móta og öll félög. Færðu músina yfir merki til að sjá nánar.</span> </p>
+<div class="tl"><div class="tlgrid" id="tlgrid"></div>
+<div class="legend"><span><i style="background:var(--ice)"></i><span lang="en">Winner shown by club badge</span><span lang="is">Sigurvegari sýndur með merki</span></span><span><i style="background:repeating-linear-gradient(45deg,#fff,#fff 3px,#F1F4F8 3px,#F1F4F8 6px);border:1px dashed #ccc"></i><span lang="en">Result to be added</span><span lang="is">Úrslit væntanleg</span></span></div>
+<div style="margin-top:16px"><div class="comp" style="font-weight:700;color:var(--navy);margin-bottom:6px">Volcanic Ashes <small style="color:var(--mut);font-weight:500"><span lang="en">indoor, since 2015 — titles won (years not listed)</span><span lang="is">innanhúss, frá 2015 — fjöldi titla (ár ekki skráð)</span></small></div>
+<div class="tally"><span><img alt="" src="media/club-puffins.png"/>Kópavogur ×5</span><span><img alt="" src="media/club-vikings.png"/>Reykjavík ×2</span></div></div>
+</div>
+<div class="life">
+<h3 style="color:var(--navy);margin:0 0 10px"><span lang="en">Clubs, 2000 → today</span><span lang="is">Félög, 2000 → í dag</span></h3>
+<div id="life"></div>
+<div class="axis"><div></div><div><span>2000</span><span>2005</span><span>2010</span><span>2015</span><span>2020</span><span>2026</span></div></div>
+<div class="legend"><span><i style="background:var(--navy)"></i><span lang="en">Active</span><span lang="is">Virkt</span></span><span><i style="background:#AEB9C9"></i><span lang="en">Defunct</span><span lang="is">Hætt</span></span><span><i style="background:repeating-linear-gradient(90deg,#0B2D5B,#0B2D5B 4px,#7f95b7 4px,#7f95b7 7px)"></i><span lang="en">Status unclear</span><span lang="is">Staða óljós</span></span></div>
+</div>
+
+</div>
+</section></main>
+<!-- ================= NEWS ================= -->
+<main class="page" id="p-news">
+<div class="phead"><div class="wrap"><span class="kick"><span lang="en">5 · News &amp; Media</span><span lang="is">5 · Fréttir og miðlar</span></span><h1><span lang="en">News &amp; Media</span><span lang="is">Fréttir og miðlar</span></h1><p><span lang="en">Posts the board publishes themselves, in both languages, each one dated and tagged.</span><span lang="is">Fréttir sem stjórnin birtir sjálf, á báðum tungumálum, hver dagsett og merkt.</span></p></div></div>
+<section><div class="wrap"><div class="grid3">
+<div class="box"><h3><span lang="en">Latest news</span><span lang="is">Nýjustu fréttir</span></h3><p><span lang="en">Dated, tagged posts with a photo.</span><span lang="is">Dagsettar, merktar fréttir með mynd.</span></p></div>
+<div class="box"><h3><span lang="en">Tournament previews &amp; reviews</span><span lang="is">Kynningar og umfjöllun um mót</span></h3><p><span lang="en">Before and after each tournament.</span><span lang="is">Fyrir og eftir hvert mót.</span></p></div>
+<div class="box"><h3><span lang="en">National team announcements</span><span lang="is">Tilkynningar landsliðs</span></h3><p><span lang="en">Squads, tours and fixtures.</span><span lang="is">Hópar, ferðir og leikir.</span></p></div>
+<div class="box"><h3><span lang="en">Interviews &amp; player stories</span><span lang="is">Viðtöl og sögur leikmanna</span></h3><p><span lang="en">Longer posts about the people in Icelandic cricket.</span><span lang="is">Lengri greinar um fólkið í íslensku krikketi.</span></p></div>
+<div class="box"><h3><span lang="en">Photo galleries</span><span lang="is">Myndasöfn</span></h3><div class="gal mini" id="gal2"></div></div>
+<div class="box"><h3><span lang="en">Video highlights</span><span lang="is">Myndbandsbrot</span> </h3><p><span lang="en">Embedded from YouTube or Facebook.</span><span lang="is">Innfellt frá YouTube eða Facebook.</span></p></div>
+<div class="box"><h3><span lang="en">Press releases</span><span lang="is">Fréttatilkynningar</span></h3><p><span lang="en">Official statements, downloadable.</span><span lang="is">Opinberar tilkynningar til niðurhals.</span></p></div>
+<div class="box"><h3><span lang="en">Media &amp; press contact</span><span lang="is">Tengiliður fjölmiðla</span></h3><p><a href="mailto:secretary@krikket.is?subject=Media">secretary@krikket.is</a></p></div>
+</div></div></section>
+</main>
+<!-- ================= PLAY ================= -->
+<main class="page" id="p-play">
+<div class="phead"><div class="wrap"><span class="kick"><span lang="en">6 · Play Cricket / Get Involved</span><span lang="is">6 · Spilaðu krikket / Taktu þátt</span></span><h1><span lang="en">Play Cricket / Get Involved</span><span lang="is">Spilaðu krikket / Taktu þátt</span></h1><p><span lang="en">No experience needed. Here is how to start.</span><span lang="is">Engin reynsla nauðsynleg. Svona byrjar þú.</span></p></div></div>
+<section><div class="wrap"><div class="grid3">
+<div class="box"><h3><span lang="en">How to start playing cricket</span><span lang="is">Hvernig byrja ég í krikketi?</span></h3><p><span lang="en">Four steps: read the guide, pick a club, come to a session, register.</span><span lang="is">Fjögur skref: lestu leiðbeiningarnar, veldu félag, mættu á æfingu, skráðu þig.</span></p></div>
+<div class="box"><h3><span lang="en">Find a club or team</span><span lang="is">Finndu félag eða lið</span> </h3><p><span lang="en">Six clubs around the capital area.</span><span lang="is">Sex félög á höfuðborgarsvæðinu.</span></p></div>
+<div class="box"><h3><span lang="en">Register as a player</span><span lang="is">Skráðu þig sem leikmann</span></h3><p><span lang="en">A short form that goes to the secretary.</span><span lang="is">Stutt eyðublað sem fer til ritara.</span></p></div>
+<div class="box"><h3><span lang="en">Beginner's guide to cricket</span><span lang="is">Byrjendaleiðbeiningar</span></h3><p><span lang="en">The rules in two minutes, with a short video.</span><span lang="is">Reglurnar á tveimur mínútum, með stuttu myndbandi.</span></p></div>
+<div class="box"><h3><span lang="en">Training &amp; practice sessions</span><span lang="is">Æfingar</span> </h3><p><span lang="en">Kids (7–15): Saturdays 9:00–11:00, Fellaskóli, from September 2026. Adults: indoor in winter, outdoors in summer.</span><span lang="is">Börn (7–15): laugardaga kl. 9:00–11:00, Fellaskóli, frá september 2026. Fullorðnir: inni á veturna, úti á sumrin.</span></p></div>
+<div class="box"><h3><span lang="en">Iceland Cricket Camp for kids</span><span lang="is">Krikketbúðir fyrir börn</span></h3><img alt="Iceland Cricket Camp poster" class="zoom" src="media/kids-camp-2026-poster.jpg" style="width:100%;border-radius:10px"/></div>
+</div></div></section>
+</main>
+<!-- ================= PARTNERS ================= -->
+<main class="page" id="p-partners">
+<div class="phead"><div class="wrap"><span class="kick"><span lang="en">8 · Partners &amp; Supporters</span><span lang="is">8 · Samstarfs- og stuðningsaðilar</span></span><h1><span lang="en">Partners &amp; Supporters</span><span lang="is">Samstarfs- og stuðningsaðilar</span></h1><p><span lang="en">Cricket in Iceland runs on volunteers and the support of partners.</span><span lang="is">Krikket á Íslandi byggir á sjálfboðaliðum og stuðningi samstarfsaðila.</span></p></div></div>
+<section><div class="wrap"><div class="grid3">
+<div class="box"><h3><span lang="en">Become a sponsor</span><span lang="is">Gerast styrktaraðili</span></h3><p><span lang="en">Help cricket grow in Iceland and reach a loyal, international community.</span><span lang="is">Hjálpaðu krikketi að vaxa á Íslandi og náðu til trygga, alþjóðlegs samfélags.</span></p><a class="btn navy" href="mailto:secretary@krikket.is?subject=Sponsorship"><span lang="en">Get in touch</span><span lang="is">Hafa samband</span></a></div>
+<div class="box"><h3><span lang="en">Current sponsors &amp; partners</span><span lang="is">Núverandi styrktaraðilar</span> </h3><ul class="plist"><li><b>BARA TALA</b>: <span lang="en">on the national and junior kit</span><span lang="is">á landsliðs- og unglingabúningi</span></li><li><a href="https://shalimar.is" rel="noopener" target="_blank"><b>Ibrahim's Shalimar</b> ↗</a>: <span lang="en">sponsor of the Sixty Ball Shootout (krikket.is, May 2025)</span><span lang="is">styrktaraðili Sixty Ball Shootout (krikket.is, maí 2025)</span></li><li><b>Indian Food Box</b>: <span lang="en">match-ball sponsor of domestic cricket (krikket.is, 2024)</span><span lang="is">boltastyrktaraðili innlends krikkets (krikket.is, 2024)</span></li><li><a href="https://www.s66sportswear.co.uk/icelandcricket" rel="noopener" target="_blank"><b>S66 Sportswear</b> ↗</a>: <span lang="en">official merchandise</span><span lang="is">opinber varningur</span></li></ul><p style="font-size:14px;color:var(--mut)"><span lang="en">Past: the Reddit r/Cricket community crowdfunded the team and was its official sponsor 2018–2020; SportZchain announced as anchor sponsor in 2022.</span><span lang="is">Áður: Reddit r/Cricket samfélagið safnaði fé fyrir liðið og var opinber styrktaraðili 2018–2020; SportZchain kynnt sem aðalstyrktaraðili 2022.</span></p></div>
+<div class="box"><h3><span lang="en">Sponsor benefits &amp; visibility</span><span lang="is">Ávinningur og sýnileiki</span></h3><p><span lang="en">Your logo on the website, the kit and our social channels.</span><span lang="is">Merkið þitt á vefnum, búningum og samfélagsmiðlum.</span></p></div>
+<div class="box"><h3><span lang="en">Individual donations &amp; support recognition</span><span lang="is">Framlög einstaklinga og viðurkenning</span> </h3><p><span lang="en">Every contribution helps. Donate by bank transfer: account number and kennitala below.</span><span lang="is">Hvert framlag skiptir máli. Styrktu með millifærslu: reikningsnúmer og kennitala hér að neðan.</span></p></div>
+</div></div></section>
+</main>
+<!-- ================= CONTACT ================= -->
+<main class="page" id="p-contact">
+<div class="phead"><div class="wrap"><span class="kick"><span lang="en">9 · Contact</span><span lang="is">9 · Samband</span></span><h1><span lang="en">Contact</span><span lang="is">Samband</span></h1><p><span lang="en">Who to contact, for what.</span><span lang="is">Við hvern á að hafa samband, og um hvað.</span></p></div></div>
+<section><div class="wrap"><div class="grid3">
+<div class="box"><h3><span lang="en">General, media &amp; tour enquiries</span><span lang="is">Almennar fyrirspurnir, fjölmiðlar og ferðir</span></h3><p><b><span lang="en">General</span><span lang="is">Almennt</span></b>: <a href="mailto:secretary@krikket.is">secretary@krikket.is</a></p><p><b><span lang="en">Media</span><span lang="is">Fjölmiðlar</span></b>: <a href="mailto:secretary@krikket.is?subject=Media">secretary@krikket.is</a></p><p><b><span lang="en">Tours</span><span lang="is">Ferðir</span></b>: <span lang="en">Want to bring a team to Iceland? Write to us.</span><span lang="is">Viltu koma með lið til Íslands? Skrifaðu okkur.</span> <a href="mailto:secretary@krikket.is?subject=Tour">secretary@krikket.is</a></p></div>
+<div class="box"><h3><span lang="en">Club contact details</span><span lang="is">Tengiliðir félaga</span> </h3><div class="minic" id="minic2"></div></div>
+<div class="box"><h3><span lang="en">Follow us</span><span lang="is">Fylgdu okkur</span></h3><p><a href="https://www.facebook.com/icelandcricket" rel="noopener" target="_blank">Facebook</a> · <a href="https://www.instagram.com/icelandcricket/" rel="noopener" target="_blank">Instagram</a> · <a href="https://x.com/icelandcricket" rel="noopener" target="_blank">X</a> · <a href="https://bsky.app/profile/icelandcricket.bsky.social" rel="noopener" target="_blank">Bluesky</a></p></div>
+<div class="box"><h3><span lang="en">Merchandise</span><span lang="is">Varningur</span></h3><p><a href="https://www.s66sportswear.co.uk/icelandcricket" rel="noopener" target="_blank"><span lang="en">Iceland Cricket shop at S66 Sportswear ↗</span><span lang="is">Verslun Iceland Cricket hjá S66 Sportswear ↗</span></a></p></div>
+</div></div></section>
+</main>
+<!-- ================= PLAN ================= -->
+<main class="page" id="p-plan">
+<div class="phead"><div class="wrap"><span class="kick"><span lang="en">For the board</span><span lang="is">Fyrir stjórnina</span></span><h1><span lang="en">From the 2027 vision to a site you can launch</span><span lang="is">Frá framtíðarsýn 2027 til vefs sem hægt er að opna</span></h1><p><span lang="en">All 9 sections of your vision are on the site from day one. Phase 1 builds every page; phase 2 adds the features that depend on CricHeroes data.</span><span lang="is">Allir 9 kaflar framtíðarsýnarinnar eru á vefnum frá fyrsta degi. 1. áfangi byggir allar síður; 2. áfangi bætir við eiginleikum sem byggja á gögnum frá CricHeroes.</span></p></div></div>
+<section><div class="wrap">
+<table class="t"><thead><tr><th><span lang="en">Your vision section</span><span lang="is">Kafli í framtíðarsýn</span></th><th><span lang="en">Phase 1</span><span lang="is">1. áfangi</span></th><th><span lang="en">Phase 2</span><span lang="is">2. áfangi</span></th></tr></thead><tbody><tr><td><b>1. Home</b></td><td><span class="ph p1">✓</span> <span lang="en">all 7 items on the homepage</span><span lang="is">öll 7 atriði á forsíðu</span></td><td><span lang="en">live match centre</span><span lang="is">lifandi leikjamiðstöð</span></td></tr><tr><td><b>2. Matches &amp; Competitions</b></td><td><span class="ph p1">✓</span> <span lang="en">calendar, tournaments, international fixtures, links to CricHeroes scorecards</span><span lang="is">dagskrá, mót, landsleikir, tenglar á skorkort</span></td><td><span lang="en">live scores, standings, CricHeroes sync (if allowed)</span><span lang="is">bein úrslit, stöðutöflur, samstilling við CricHeroes (ef leyft)</span></td></tr><tr><td><b>3. Teams &amp; Players</b></td><td><span class="ph p1">✓</span> <span lang="en">national team, squads, youth, women, clubs, coaches</span><span lang="is">landslið, hópar, ungmenni, konur, félög, þjálfarar</span></td><td><span lang="en">player profiles, club player stats</span><span lang="is">leikmannasíður, tölfræði leikmanna</span></td></tr><tr><td><b>4. Statistics &amp; Records</b></td><td><span class="ph p1">✓</span> <span lang="en">tournament winners &amp; history</span><span lang="is">sigurvegarar móta og saga</span></td><td><span lang="en">batting, bowling, fielding, season, rankings, team records, scorecards</span><span lang="is">kylfu-, kast-, grípamet, tímabil, röðun, liðamet, skorkort</span></td></tr><tr><td><b>5. News &amp; Media</b></td><td><span class="ph p1">✓</span> <span lang="en">news, previews, announcements, stories, press, contact</span><span lang="is">fréttir, kynningar, tilkynningar, sögur, fréttatilkynningar</span></td><td><span lang="en">full galleries, video highlights</span><span lang="is">myndasöfn, myndbönd</span></td></tr><tr><td><b>6. Play Cricket</b></td><td><span class="ph p1">✓</span> <span lang="en">all items</span><span lang="is">öll atriði</span></td><td>—</td></tr><tr><td><b>7. About</b></td><td><span class="ph p1">✓</span> <span lang="en">all items</span><span lang="is">öll atriði</span></td><td>—</td></tr><tr><td><b>8. Partners &amp; Supporters</b></td><td><span class="ph p1">✓</span> <span lang="en">all items; donations by bank transfer</span><span lang="is">öll atriði; framlög með millifærslu</span></td><td>—</td></tr><tr><td><b>9. Contact</b></td><td><span class="ph p1">✓</span> <span lang="en">all items</span><span lang="is">öll atriði</span></td><td>—</td></tr></tbody></table>
+<div class="two" style="margin-top:24px">
+<div class="box"><h3><span lang="en">Included in phase 1</span><span lang="is">Innifalið í 1. áfanga</span></h3><ul><li><span lang="en">English and Icelandic</span><span lang="is">Enska og íslenska</span></li><li><span lang="en">Volunteers edit text, news and photos themselves (simple editor, no code)</span><span lang="is">Sjálfboðaliðar breyta texta, fréttum og myndum sjálfir (einfaldur ritill, enginn kóði)</span></li><li><span lang="en">Site, domain and accounts owned by the association</span><span lang="is">Vefur, lén og aðgangar í eigu sambandsins</span></li><li><span lang="en">Every fact checked against a source</span><span lang="is">Allar staðreyndir sannreyndar</span></li><li><span lang="en">Short training for whoever updates the site</span><span lang="is">Stutt kennsla fyrir þá sem uppfæra vefinn</span></li></ul></div>
+<div class="box"><h3><span lang="en">Questions for the board</span><span lang="is">Spurningar til stjórnar</span></h3><ul><li><span lang="en">Which clubs are active now (4 or 6)?</span><span lang="is">Hvaða félög eru virk núna (4 eða 6)?</span></li><li><span lang="en">Does your CricHeroes account allow embedding or exports?</span><span lang="is">Leyfir CricHeroes-aðgangurinn ykkar innfellingu eða útflutning?</span></li><li><span lang="en">Who will update the site after launch?</span><span lang="is">Hver mun uppfæra vefinn eftir opnun?</span></li><li><span lang="en">Target launch: before the 2027 season?</span><span lang="is">Markmið um opnun: fyrir tímabilið 2027?</span></li></ul></div>
+</div>
+</div></section>
+</main>
+<footer>
+<div class="wrap">
+<div class="fgrid">
+<div><img alt="" src="media/iceland-cricket-logo.png" style="height:64px;background:#fff;border-radius:8px;padding:4px"/><p><span lang="en">Krikketsamband Íslands – the Icelandic Cricket Association.</span><span lang="is">Krikketsamband Íslands – Icelandic Cricket Association.</span></p></div>
+<div><h4><a href="#contact"><span lang="en">Contact →</span><span lang="is">Samband →</span></a></h4><a href="mailto:secretary@krikket.is">secretary@krikket.is</a><br/></div>
+<div><h4><a href="#contact/follow"><span lang="en">Follow →</span><span lang="is">Fylgdu okkur →</span></a></h4><a href="https://www.facebook.com/icelandcricket" rel="noopener" target="_blank">Facebook</a><br/><a href="https://www.instagram.com/icelandcricket/" rel="noopener" target="_blank">Instagram</a><br/><a href="https://x.com/icelandcricket" rel="noopener" target="_blank">X</a><br/><a href="https://bsky.app/profile/icelandcricket.bsky.social" rel="noopener" target="_blank">Bluesky</a></div>
+<div><h4><span lang="en">Quick links</span><span lang="is">Flýtileiðir</span></h4><a href="#matches/fixtures"><span lang="en">Fixtures &amp; results</span><span lang="is">Leikir og úrslit</span></a><br/><a href="#play/start"><span lang="en">Start playing</span><span lang="is">Byrjaðu að spila</span></a><br/><a href="https://www.s66sportswear.co.uk/icelandcricket" rel="noopener" target="_blank"><span lang="en">Shop (S66 Sportswear)</span><span lang="is">Verslun (S66 Sportswear)</span></a><br/><a href="#plan"><span lang="en">Phase plan</span><span lang="is">Áfangar</span></a></div>
+</div>
+<div class="fbot"><span>© Krikketsamband Íslands</span><span><span lang="en">Prototype – built with AI assistance by Marina Ermina</span><span lang="is">Frumgerð – unnin með aðstoð gervigreindar af Marinu Erminu</span></span></div>
+</div>
+</footer>
+<div class="lb" id="lb"><img alt="" id="lbimg"/><button aria-label="Close" class="x">✕</button><button aria-label="Previous" class="l">‹</button><button aria-label="Next" class="r">›</button><div class="lc" id="lbc"></div></div>
+</body></html><script>
+const IMG={hammers:"media/club-hammers.png",puffins:"media/club-puffins.png",vikings:"media/club-vikings.png",volcano:"media/club-volcano.png",glaciers:"media/club-glaciers.png",ravens:"media/club-ravens.png"};
+const CL={vikings:"Reykjavík Vikings",puffins:"Kópavogur Puffins",hammers:"Hafnarfjörður Hammers",volcano:"Vesturbær Volcano",glaciers:"Garðabær Glaciers",ravens:"Mosfellsbær Ravens"};
+const t=(en,is)=>`<span lang="en">${en}</span><span lang="is">${is}</span>`;
+/* clubs: facts from krikket.is/about + AGM 2026 slide */
+const clubs=[
+ ["vikings",t("Founded 2000 (as Kylfan)","Stofnað 2000 (sem Kylfan)")],
+ ["puffins",t("Founded 2015","Stofnað 2015")],
+ ["hammers",t("Founded 2018","Stofnað 2018")],
+ ["volcano",t("Founded 2021","Stofnað 2021")],
+ ["glaciers",t("Founded 2018","Stofnað 2018")],
+ ["ravens",t("Founded 2026","Stofnað 2026")]];
+document.getElementById('clubs').innerHTML=clubs.map(([k,s])=>`<div class="club"><img src="${IMG[k]}" alt="${CL[k]}"><b>${CL[k]}</b><small>${s}</small></div>`).join('');
+/* sample matches — clearly labelled sample, not real results */
+const M={
+ live:[["puffins","hammers",`<span class="live"></span>${t("In progress","Í gangi")}`,t("Puffins 96/3 (11.2 ov)","Puffins 96/3 (11,2 yfir)")]],
+ res:[["vikings","volcano",t("Íslensk Premier League","Íslensk Premier League"),t("Vikings won by 18 runs","Vikings unnu með 18 hlaupum")],
+      ["glaciers","ravens",t("Sixty Ball Shootout","Sixty Ball Shootout"),t("Ravens won by 4 wickets","Ravens unnu með 4 wicketum")],
+      ["hammers","puffins",t("Summer Solstice Sixes","Summer Solstice Sixes"),t("Hammers won by 9 runs","Hammers unnu með 9 hlaupum")]],
+ sch:[["volcano","glaciers",t("Sat 13:00","lau. 13:00"),t("Íslensk Premier League","Íslensk Premier League")],
+      ["ravens","vikings",t("Sun 11:00","sun. 11:00"),t("Sixty Ball Shootout","Sixty Ball Shootout")]]};
+function mc(k){document.getElementById('mlist').innerHTML=M[k].map(([a,b,d,r])=>`<div class="m"><div class="logos"><img src="${IMG[a]}" alt=""><img src="${IMG[b]}" alt=""></div><div><div class="t">${CL[a]} v ${CL[b]}</div><div class="r">${r}</div><div class="d">${d}</div></div><a href="#matches">${t("Scorecard","Skorkort")} ↗</a></div>`).join('');
+ document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x.dataset.t===k));}
+document.querySelectorAll('.tabs button').forEach(x=>x.onclick=()=>mc(x.dataset.t));mc('res');
+/* trophy grid — real data from krikket.is/about (fetched 12 Nov 2026) */
+const yrs=[2018,2019,2020,2021,2022,2023,2024,2025,2026];
+const comps=[
+ ["Íslensk Premier League",t("T20 · since 2020","T20 · frá 2020"),2020,{2020:"puffins",2021:"hammers"}],
+ ["Sixty Ball Shootout",t("T10 · since 2020","T10 · frá 2020"),2020,{2020:"puffins",2021:"vikings"}],
+ ["Summer Solstice Sixes",t("6-a-side · since 2018","6 í liði · frá 2018"),2018,{2018:"glaciers",2019:"vikings",2020:"vikings",2021:"hammers"}],
+ ["Samuel Gill Trophy",t("exhibition · since 2020","sýningarleikur · frá 2020"),2020,{2020:"RI",2021:"RI"}]];
+let g=`<div></div>`+yrs.map(y=>`<div class="yr">${y}</div>`).join('');
+comps.forEach(([n,s,start,w])=>{g+=`<div class="comp">${n}<small>${s}</small></div>`;
+ yrs.forEach(y=>{if(y<start){g+=`<div></div>`;return}const c=w[y];
+  if(c==="RI")g+=`<div class="cell ri" title="Rest of Iceland, ${y}">${t("Rest of Iceland","Restin af Íslandi")}</div>`;
+  else if(c)g+=`<div class="cell" title="${CL[c]}, ${n} ${y}"><img src="${IMG[c]}" alt="${CL[c]}"></div>`;
+  else g+=`<div class="cell gap" title="${y}: not on krikket.is"></div>`;});});
+const tg=document.getElementById('tlgrid');tg.style.gridTemplateColumns=`210px repeat(${yrs.length},1fr)`;tg.innerHTML=g;
+/* club lifespans */
+const Y0=2000,Y1=2026.9,pct=y=>((y-Y0)/(Y1-Y0)*100);
+const life=[["Reykjavík Vikings (Kylfan)",2000,2026.9,""],["Stykkishólmur",2000,2003.9,"gone"],["Tryggingamiðstöðin",2001,2002.9,"gone"],["Tata",2008,2008.9,"gone"],["Kópavogur Puffins",2015,2026.9,""],["Hafnarfjörður Hammers",2018,2026.9,""],["Seltjarnarnes",2018,2018.9,"gone"],["Garðabær Glaciers",2018,2026.9,"q"],["Vesturbær Volcano",2021,2026.9,""],["Mosfellsbær Ravens",2026,2026.9,""]];
+document.getElementById('life').innerHTML=life.map(([n,a,b,c])=>`<div class="lrow"><span>${n}</span><div class="ltrack"><div class="lbar ${c}" style="left:${pct(a)}%;width:${Math.max(pct(b)-pct(a),1.4)}%" title="${n}: ${a}–${c==='gone'?Math.floor(b):(c==='q'?'?':'')}"></div></div></div>`).join('');
+
+/* hero carousel — photos from the association's Facebook (input/photo) */
+const SL=[["media/national-team-caps.jpg","center 30%","Iceland national team","Landslið Íslands"],
+ ["media/match-mcc-bowler.jpg","center 45%","Iceland v MCC, August 2026","Ísland gegn MCC, ágúst 2026"],
+ ["media/match-action-mountains.jpg","center 55%","Match day under the mountains","Leikdagur undir fjöllunum"],
+ ["media/national-team-squad.jpg","center 40%","The national squad","Landsliðshópurinn"],
+ ["media/teams-in-whites.jpg","center 45%","Iceland v MCC","Ísland gegn MCC"]];
+const sd=document.getElementById('slides'),dd=document.getElementById('dots'),cp=document.getElementById('cap');
+SL.forEach((x,i)=>{const d=document.createElement('div');d.className='slide';d.style.backgroundImage=`url(${x[0]})`;d.style.backgroundPosition=x[1];sd.appendChild(d);
+ const b=document.createElement('i');b.onclick=()=>{go(i);rs()};dd.appendChild(b);});
+let cur=0,tm;function go(i){const old=cur;cur=(i+SL.length)%SL.length;[...sd.children].forEach((e,j)=>{e.classList.remove('on','prev');if(j===old&&old!==cur)e.classList.add('prev');});void sd.offsetWidth;sd.children[cur].classList.add('on');[...dd.children].forEach((e,j)=>e.classList.toggle('on',j===cur));
+ cp.innerHTML=t(SL[cur][2],SL[cur][3]);}
+function rs(){clearInterval(tm);tm=setInterval(()=>go(cur+1),2000)}
+document.getElementById('prev').onclick=()=>{go(cur-1);rs()};document.getElementById('next').onclick=()=>{go(cur+1);rs()};
+go(0);rs();
+
+document.getElementById('fx').innerHTML=M.res.map(([a,b,d,r])=>`<div class="m"><div class="logos"><img src="${IMG[a]}" alt=""><img src="${IMG[b]}" alt=""></div><div><div class="t">${CL[a]} v ${CL[b]}</div><div class="r">${r}</div><div class="d">${d}</div></div></div>`).join('');
+function setV(v){document.body.classList.toggle('optB',v==='B');document.querySelectorAll('.lay button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));}
+document.querySelectorAll('.lay button').forEach(b=>b.onclick=()=>setV(b.dataset.v));
+if(location.search.includes('layout=B'))setV('B');
+
+
+/* next match (sample) */
+const NX=t('Sat 13:00','lau. 13:00');
+const nextHTML=`<span class="lbl">${t('Next match','Næsti leikur')}</span><img src="${IMG.volcano}" alt=""><b>${CL.volcano} v ${CL.glaciers}</b><img src="${IMG.glaciers}" alt=""><small>${NX}</small>`;
+document.getElementById('nxm').innerHTML=nextHTML;
+const fxb=document.getElementById('fx');fxb.innerHTML=`<div class="next">${nextHTML}</div>`+fxb.innerHTML;
+/* gallery */
+const GAL=[["media/match-mcc-bowler.jpg","Iceland v MCC, Aug 2026","Ísland gegn MCC, ág. 2026"],["media/national-team-caps.jpg","National team","Landsliðið"],["media/match-action-mountains.jpg","Match day","Leikdagur"],["media/teams-in-whites.jpg","Teams in whites","Lið í hvítu"],["media/national-team-squad.jpg","National squad","Landsliðshópurinn"],["media/kids-camp-photo.jpg","Kids camp","Krikketbúðir barna"],["media/mcc-2026-poster.jpg","MCC series poster","Auglýsing MCC-leikja"]];
+function galFill(id,n,vid){const g=document.getElementById(id);if(!g)return;GAL.slice(0,n).forEach((x,i)=>{const d=document.createElement('div');d.style.backgroundImage=`url(${x[0]})`;d.title=x[1];d.onclick=()=>lbOpen(GAL.map(y=>[y[0],t(y[1],y[2])]),i);g.appendChild(d);});
+ if(vid){const v=document.createElement('div');v.className='vid';v.innerHTML=`<i>▶</i>${t('Video highlights','Myndbandsbrot')}`;g.appendChild(v);}}
+galFill('gal',7,true);galFill('gal2',6,false);
+/* mini club grid */
+['minic','minic2'].forEach(id=>{const m=document.getElementById(id);if(m)m.innerHTML=Object.keys(CL).map(k=>`<div><img src="${IMG[k]}" alt="">${CL[k].split(' ').slice(1).join(' ')}</div>`).join('');});
+
+
+document.querySelectorAll('[data-go]').forEach(el=>{el.style.cursor='pointer';el.onclick=e=>{if(e.target.closest('a,button'))return;location.hash=el.dataset.go;};});
+document.querySelectorAll('#p-home .m a').forEach(a=>a.setAttribute('href','#matches/scorecards'));
+document.querySelectorAll('#nxm, #fx .next').forEach(n=>{n.style.cursor='pointer';n.onclick=()=>location.hash='matches/fixtures';});
+document.querySelectorAll('#clubs .club').forEach(c=>c.onclick=()=>{location.hash='teams/clubs'});
+document.querySelectorAll('#p-home .gal .vid').forEach(v=>{v.style.cursor='pointer';v.onclick=()=>location.hash='news/videos';});
+
+/* ===== shared sample data (EXAMPLE, not real) ===== */
+const KC={vikings:"Reykjavík Vikings",puffins:"Kópavogur Puffins",hammers:"Hafnarfjörður Hammers",volcano:"Vesturbær Volcano",glaciers:"Garðabær Glaciers",ravens:"Mosfellsbær Ravens"};
+const KCOL={vikings:"#B3261E",puffins:"#E39B17",hammers:"#D9480F",volcano:"#5B2A86",glaciers:"#1C7ED6",ravens:"#212529"};
+const COMP={ipl:["Íslensk Premier League","#0B2D5B"],sbs:["Sixty Ball Shootout","#D7263D"],sss:["Summer Solstice Sixes","#E8B321"],nat:["Iceland v international","#2F9E44"]};
+const KEYS=Object.keys(KC);
+// deterministic pseudo-random
+let _seed=7;function rnd(){_seed=(_seed*9301+49297)%233280;return _seed/233280;}
+function buildFixtures(){
+  const out=[];const start=new Date(2027,4,15);// 15 May 2027
+  // IPL: double round robin-ish on Saturdays over 15 weeks
+  const pairs=[];KEYS.forEach((a,i)=>KEYS.forEach((b,j)=>{if(i<j)pairs.push([a,b])}));
+  pairs.forEach((p,i)=>{const d=new Date(start);d.setDate(d.getDate()+7*Math.floor(i/1.0)%105);out.push({c:'ipl',a:p[0],b:p[1],d:new Date(start.getTime()+ (i%15)*7*864e5)})});
+  // SBS: Sundays, 9 matches
+  for(let i=0;i<9;i++){const a=KEYS[i%6],b=KEYS[(i+2)%6];out.push({c:'sbs',a,b,d:new Date(start.getTime()+(1+i*1.5|0)*7*864e5+864e5)})}
+  // Sixes: one day, midsummer
+  out.push({c:'sss',a:'vikings',b:'puffins',d:new Date(2027,5,19),label:'Summer Solstice Sixes (tournament day)'});
+  // internationals
+  out.push({c:'nat',a:'iceland',b:'',d:new Date(2027,7,14),label:'Iceland v touring side (example)'});
+  out.push({c:'nat',a:'iceland',b:'',d:new Date(2027,7,15),label:'Iceland v touring side (example)'});
+  out.forEach(f=>{if(f.a!=='iceland'&&f.c!=='sss'){const r=rnd();f.w=r<.5?f.a:f.b;f.m=r<.25?`${f.w===f.a?KC[f.a]:KC[f.b]} won by ${5+Math.floor(rnd()*60)} runs`:`${f.w===f.a?KC[f.a]:KC[f.b]} won by ${(()=>{const n=1+Math.floor(rnd()*8);return n+(n===1?' wicket':' wickets')})()}`;}});
+  return out.sort((x,y)=>x.d-y.d);
+}
+const FIX=buildFixtures();
+const fmt=d=>d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
+/* ===== season calendar ===== */
+function seasonCalendar(el,{compact=false}={}){
+  const s0=new Date(2027,4,10), weeks=20;
+  const comps=['ipl','sbs','sss','nat'];
+  const W=compact?44:52;
+  let h=`<div class="kc-cal"><div class="kc-grid" style="grid-template-columns:${compact?150:190}px repeat(${weeks},${W}px)"><div></div>`;
+  let lastM=-1;
+  for(let w=0;w<weeks;w++){const d=new Date(s0.getTime()+w*7*864e5);const m=d.getMonth();h+=`<div class="kc-wk">${m!==lastM?'<b>'+d.toLocaleDateString('en-GB',{month:'short'})+'</b>':''}<span>${d.getDate()}</span></div>`;lastM=m;}
+  comps.forEach(c=>{h+=`<div class="kc-row"><i style="background:${COMP[c][1]}"></i>${COMP[c][0]}</div>`;
+    for(let w=0;w<weeks;w++){const a=new Date(s0.getTime()+w*7*864e5),b=new Date(a.getTime()+7*864e5);
+      const ms=FIX.map((f,i)=>[f,i]).filter(([f])=>f.c===c&&f.d>=a&&f.d<b);
+      h+=`<div class="kc-cell">${ms.map(([f,i])=>`<button class="kc-dot" data-i="${i}" style="background:${COMP[c][1]}" title="${fmt(f.d)}: ${f.label||KC[f.a]+' v '+KC[f.b]}"></button>`).join('')}</div>`;}});
+  h+=`</div></div><div class="kc-detail">Click a dot to see the match.</div>`;
+  el.innerHTML=h;
+  el.querySelectorAll('.kc-dot').forEach(b=>b.onclick=()=>{const f=FIX[b.dataset.i];el.querySelectorAll('.kc-dot').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+    el.querySelector('.kc-detail').innerHTML=`<span class="kc-tag" style="background:${COMP[f.c][1]}">${COMP[f.c][0]}</span> <b>${fmt(f.d)}</b> · ${f.label||KC[f.a]+' v '+KC[f.b]}${f.m?' · <span class="kc-res">'+f.m+'</span>':''} <a href="#" onclick="return false" class="kc-sc">Scorecard on CricHeroes ↗</a>`;});
+}
+
+seasonCalendar(document.getElementById("seasoncal"),{compact:true});
+/* lightbox */
+const lb=document.getElementById('lb'),lbi=document.getElementById('lbimg'),lbc=document.getElementById('lbc');let LS=[],LI=0;
+function lbShow(){lbi.src=LS[LI][0];lbc.innerHTML=LS[LI][1]||'';lb.querySelector('.l').style.display=lb.querySelector('.r').style.display=LS.length>1?'':'none';}
+function lbOpen(list,i){LS=list;LI=i;lbShow();lb.classList.add('open');clearInterval(tm);}
+function lbClose(){lb.classList.remove('open');rs();}
+lb.querySelector('.x').onclick=lbClose;lb.onclick=e=>{if(e.target===lb)lbClose()};
+lb.querySelector('.l').onclick=e=>{e.stopPropagation();LI=(LI-1+LS.length)%LS.length;lbShow()};
+lb.querySelector('.r').onclick=e=>{e.stopPropagation();LI=(LI+1)%LS.length;lbShow()};
+addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;if(e.key==='Escape')lbClose();if(e.key==='ArrowLeft')lb.querySelector('.l').click();if(e.key==='ArrowRight')lb.querySelector('.r').click();});
+document.querySelector('.hero').addEventListener('click',e=>{if(e.target.closest('.herobox,.hctl'))return;lbOpen(SL.map(x=>[x[0],t(x[2],x[3])]),cur);});
+document.querySelectorAll('img.zoom').forEach(im=>im.onclick=()=>lbOpen([[im.src,im.alt]],0));
+document.querySelectorAll('.xp').forEach(b=>b.onclick=e=>{e.preventDefault();e.stopPropagation();lbOpen([[b.dataset.src,'']],0)});
+
+document.querySelectorAll('.notes button').forEach(b=>b.onclick=()=>{const off=b.dataset.n==='off';document.body.classList.toggle('clean',off);document.querySelectorAll('.notes button').forEach(x=>x.classList.toggle('on',(x.dataset.n==='off')===off));});
+const BOXID={about:{"Who we are":"who","Mission, vision & strategy":"mission","Board & committee members":"board","Governance & constitution":"governance","Policies & codes of conduct":"policies","Icelandic cricket history":"history","Contact the association":"contact"},
+matches:{"Fixtures & calendar":"fixtures","Live scores & streams":"live","Match centre / scorecards":"scorecards","Results archive":"results","League standings":"standings","Domestic tournaments":"domestic","International fixtures":"international"},
+teams:{"Iceland national team":"national","National squad & player profiles":"squad","Men's cricket":"men","Youth & development squads (as it develops)":"youth","Women’s cricket (as it develops)":"women","Domestic clubs & teams":"clubs","Club player statistics & records":"clubstats","Coaching staff & team management":"coaches"},
+stats:{"All-time batting records":"batting","Bowling records":"bowling","Fielding records":"fielding","Season statistics":"season","Player rankings":"rankings","Team records":"team","Tournament winners":"winners","Historical scorecards":"scorecards","National team performance":"national"},
+news:{"Latest news":"latest","Tournament previews & reviews":"previews","National team announcements":"announcements","Interviews & player stories":"stories","Photo galleries":"galleries","Video highlights":"videos","Press releases":"press","Media & press contact":"media"},
+play:{"How to start playing cricket":"start","Find a club or team":"find","Register as a player":"register","Beginner's guide to cricket":"guide","Training & practice sessions":"training","Iceland Cricket Camp for kids":"poster"},
+partners:{"Become a sponsor":"sponsor","Current sponsors & partners":"current","Sponsor benefits & visibility":"benefits","Individual donations & support recognition":"donate"},
+contact:{"General, media & tour enquiries":"general","Club contact details":"clubs","Follow us":"follow","Merchandise":"merch"}};
+Object.entries(BOXID).forEach(([pg,m])=>document.querySelectorAll('#p-'+pg+' .box').forEach(b=>{const h=b.querySelector('h3 [lang=en]');if(h&&m[h.textContent.trim()])b.id=pg+'-'+m[h.textContent.trim()];}));
+/* routing + language */
+function route(){const h=(location.hash||'#home').slice(1);const [id,anc]=h.split('/');const p=document.getElementById('p-'+id)||document.getElementById('p-home');
+ document.querySelectorAll('.page').forEach(x=>x.classList.toggle('on',x===p));
+ document.querySelectorAll('nav.main a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+id));
+ document.querySelector('nav.main').classList.remove('open');
+ const t=anc&&document.getElementById(id+'-'+anc);
+ if(t){setTimeout(()=>{t.scrollIntoView({behavior:'smooth',block:'center'});t.classList.remove('flash');void t.offsetWidth;t.classList.add('flash');},60);}else window.scrollTo(0,0);}
+addEventListener('hashchange',route);route();
+function setL(l){document.body.classList.toggle('is',l==='is');document.documentElement.lang=l;document.querySelectorAll('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.l===l));}
+document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>setL(b.dataset.l));
+</script>
+</body>
+</html>
